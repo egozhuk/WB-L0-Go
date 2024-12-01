@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Service Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f4f4f4;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 300px;
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 8px 15px;
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #357ae8;
+        }
+        .message {
+            margin-top: 10px;
+            font-size: 1.1em;
+        }
+        .error {
+            color: #D8000C;
+        }
+        .success {
+            color: #4F8A10;
+        }
+        .order-details {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h3 {
+            border-bottom: 2px solid #4285F4;
+            padding-bottom: 5px;
+            color: #4285F4;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4285F4;
+            color: white;
+        }
+        .items-table th {
+            background-color: #6c757d;
+        }
+        .no-data {
+            color: #555;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Order Service</h1>
+
+<h2>Get Order by UID</h2>
+
+<form id="orderForm">
+    <label for="orderUID">Order UID:</label>
+    <input type="text" id="orderUID" name="orderUID" required placeholder="Enter Order UID">
+    <button type="submit">Get Order</button>
+</form>
+
+<div id="message" class="message"></div>
+
+<div id="orderDetails" class="order-details" style="display: none;">
+    <div class="section">
+        <h3>General Information</h3>
+        <table>
+            <tr>
+                <th>Order UID</th>
+                <td id="general_order_uid"></td>
+            </tr>
+            <tr>
+                <th>Track Number</th>
+                <td id="general_track_number"></td>
+            </tr>
+            <tr>
+                <th>Entry</th>
+                <td id="general_entry"></td>
+            </tr>
+            <tr>
+                <th>Locale</th>
+                <td id="general_locale"></td>
+            </tr>
+            <tr>
+                <th>Customer ID</th>
+                <td id="general_customer_id"></td>
+            </tr>
+            <tr>
+                <th>Delivery Service</th>
+                <td id="general_delivery_service"></td>
+            </tr>
+            <tr>
+                <th>Shard Key</th>
+                <td id="general_shardkey"></td>
+            </tr>
+            <tr>
+                <th>SM ID</th>
+                <td id="general_sm_id"></td>
+            </tr>
+            <tr>
+                <th>Date Created</th>
+                <td id="general_date_created"></td>
+            </tr>
+            <tr>
+                <th>Oof Shard</th>
+                <td id="general_oof_shard"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3>Delivery Information</h3>
+        <table>
+            <tr>
+                <th>Name</th>
+                <td id="delivery_name"></td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td id="delivery_phone"></td>
+            </tr>
+            <tr>
+                <th>ZIP</th>
+                <td id="delivery_zip"></td>
+            </tr>
+            <tr>
+                <th>City</th>
+                <td id="delivery_city"></td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td id="delivery_address"></td>
+            </tr>
+            <tr>
+                <th>Region</th>
+                <td id="delivery_region"></td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td id="delivery_email"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3>Payment Information</h3>
+        <table>
+            <tr>
+                <th>Transaction</th>
+                <td id="payment_transaction"></td>
+            </tr>
+            <tr>
+                <th>Request ID</th>
+                <td id="payment_request_id"></td>
+            </tr>
+            <tr>
+                <th>Currency</th>
+                <td id="payment_currency"></td>
+            </tr>
+            <tr>
+                <th>Provider</th>
+                <td id="payment_provider"></td>
+            </tr>
+            <tr>
+                <th>Amount</th>
+                <td id="payment_amount"></td>
+            </tr>
+            <tr>
+                <th>Payment DT</th>
+                <td id="payment_payment_dt"></td>
+            </tr>
+            <tr>
+                <th>Bank</th>
+                <td id="payment_bank"></td>
+            </tr>
+            <tr>
+                <th>Delivery Cost</th>
+                <td id="payment_delivery_cost"></td>
+            </tr>
+            <tr>
+                <th>Goods Total</th>
+                <td id="payment_goods_total"></td>
+            </tr>
+            <tr>
+                <th>Custom Fee</th>
+                <td id="payment_custom_fee"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3>Items</h3>
+        <table class="items-table">
+            <thead>
+            <tr>
+                <th>Chrt ID</th>
+                <th>Track Number</th>
+                <th>Price</th>
+                <th>RID</th>
+                <th>Name</th>
+                <th>Sale</th>
+                <th>Size</th>
+                <th>Total Price</th>
+                <th>NM ID</th>
+                <th>Brand</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody id="items_body">
+            <!-- Items will be dynamically inserted here -->
+            </tbody>
+        </table>
+        <p id="no_items" class="no-data" style="display: none;">No items available for this order.</p>
+    </div>
+</div>
+
+<script>
+    document.getElementById('orderForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const uid = document.getElementById('orderUID').value.trim();
+        const messageDiv = document.getElementById('message');
+        const orderDetailsDiv = document.getElementById('orderDetails');
+
+        // Очистка предыдущих сообщений и данных
+        messageDiv.innerHTML = '';
+        orderDetailsDiv.style.display = 'none';
+        clearOrderDetails();
+
+        if (!uid) {
+            messageDiv.innerHTML = `<p class="error">Пожалуйста, введите корректный Order UID.</p>`;
+            return;
+        }
+
+        try {
+            const response = await fetch(`/order/${encodeURIComponent(uid)}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                messageDiv.innerHTML = `<p class="error">${errorData.error || 'Не удалось получить заказ.'}</p>`;
+                return;
+            }
+
+            const order = await response.json();
+            populateOrderDetails(order);
+            orderDetailsDiv.style.display = 'block';
+            messageDiv.innerHTML = `<p class="success">Заказ успешно получен.</p>`;
+        } catch (error) {
+            console.error('Ошибка при получении заказа:', error);
+            messageDiv.innerHTML = `<p class="error">Произошла ошибка при получении заказа.</p>`;
+        }
+    });
+
+    function clearOrderDetails() {
+        // General Information
+        document.getElementById('general_order_uid').textContent = '';
+        document.getElementById('general_track_number').textContent = '';
+        document.getElementById('general_entry').textContent = '';
+        document.getElementById('general_locale').textContent = '';
+        document.getElementById('general_customer_id').textContent = '';
+        document.getElementById('general_delivery_service').textContent = '';
+        document.getElementById('general_shardkey').textContent = '';
+        document.getElementById('general_sm_id').textContent = '';
+        document.getElementById('general_date_created').textContent = '';
+        document.getElementById('general_oof_shard').textContent = '';
+
+        // Delivery Information
+        document.getElementById('delivery_name').textContent = '';
+        document.getElementById('delivery_phone').textContent = '';
+        document.getElementById('delivery_zip').textContent = '';
+        document.getElementById('delivery_city').textContent = '';
+        document.getElementById('delivery_address').textContent = '';
+        document.getElementById('delivery_region').textContent = '';
+        document.getElementById('delivery_email').textContent = '';
+
+        // Payment Information
+        document.getElementById('payment_transaction').textContent = '';
+        document.getElementById('payment_request_id').textContent = '';
+        document.getElementById('payment_currency').textContent = '';
+        document.getElementById('payment_provider').textContent = '';
+        document.getElementById('payment_amount').textContent = '';
+        document.getElementById('payment_payment_dt').textContent = '';
+        document.getElementById('payment_bank').textContent = '';
+        document.getElementById('payment_delivery_cost').textContent = '';
+        document.getElementById('payment_goods_total').textContent = '';
+        document.getElementById('payment_custom_fee').textContent = '';
+
+        // Items
+        const itemsBody = document.getElementById('items_body');
+        itemsBody.innerHTML = '';
+        document.getElementById('no_items').style.display = 'none';
+    }
+
+    function populateOrderDetails(order) {
+        // General Information
+        document.getElementById('general_order_uid').textContent = order.order_uid || '-';
+        document.getElementById('general_track_number').textContent = order.track_number || '-';
+        document.getElementById('general_entry').textContent = order.entry || '-';
+        document.getElementById('general_locale').textContent = order.locale || '-';
+        document.getElementById('general_customer_id').textContent = order.customer_id || '-';
+        document.getElementById('general_delivery_service').textContent = order.delivery_service || '-';
+        document.getElementById('general_shardkey').textContent = order.shardkey || '-';
+        document.getElementById('general_sm_id').textContent = order.sm_id || '-';
+        document.getElementById('general_date_created').textContent = order.date_created ? new Date(order.date_created).toLocaleString() : '-';
+        document.getElementById('general_oof_shard').textContent = order.oof_shard || '-';
+
+        // Delivery Information
+        if (order.delivery) {
+            document.getElementById('delivery_name').textContent = order.delivery.name || '-';
+            document.getElementById('delivery_phone').textContent = order.delivery.phone || '-';
+            document.getElementById('delivery_zip').textContent = order.delivery.zip || '-';
+            document.getElementById('delivery_city').textContent = order.delivery.city || '-';
+            document.getElementById('delivery_address').textContent = order.delivery.address || '-';
+            document.getElementById('delivery_region').textContent = order.delivery.region || '-';
+            document.getElementById('delivery_email').textContent = order.delivery.email || '-';
+        }
+
+        // Payment Information
+        if (order.payment) {
+            document.getElementById('payment_transaction').textContent = order.payment.transaction || '-';
+            document.getElementById('payment_request_id').textContent = order.payment.request_id || '-';
+            document.getElementById('payment_currency').textContent = order.payment.currency || '-';
+            document.getElementById('payment_provider').textContent = order.payment.provider || '-';
+            document.getElementById('payment_amount').textContent = order.payment.amount !== undefined ? order.payment.amount : '-';
+            document.getElementById('payment_payment_dt').textContent = order.payment.payment_dt ? new Date(order.payment.payment_dt * 1000).toLocaleString() : '-';
+            document.getElementById('payment_bank').textContent = order.payment.bank || '-';
+            document.getElementById('payment_delivery_cost').textContent = order.payment.delivery_cost !== undefined ? order.payment.delivery_cost : '-';
+            document.getElementById('payment_goods_total').textContent = order.payment.goods_total !== undefined ? order.payment.goods_total : '-';
+            document.getElementById('payment_custom_fee').textContent = order.payment.custom_fee !== undefined ? order.payment.custom_fee : '-';
+        }
+
+        // Items
+        const itemsBody = document.getElementById('items_body');
+        if (order.items && order.items.length > 0) {
+            order.items.forEach(item => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                        <td>${item.chrt_id || '-'}</td>
+                        <td>${item.track_number || '-'}</td>
+                        <td>${item.price !== undefined ? item.price : '-'}</td>
+                        <td>${item.rid || '-'}</td>
+                        <td>${item.name || '-'}</td>
+                        <td>${item.sale !== undefined ? item.sale : '-'}</td>
+                        <td>${item.size || '-'}</td>
+                        <td>${item.total_price !== undefined ? item.total_price : '-'}</td>
+                        <td>${item.nm_id !== undefined ? item.nm_id : '-'}</td>
+                        <td>${item.brand || '-'}</td>
+                        <td>${item.status !== undefined ? item.status : '-'}</td>
+                    `;
+                itemsBody.appendChild(row);
+            });
+        } else {
+            document.getElementById('no_items').style.display = 'block';
+        }
+    }
+</script>
+
+</body>
+</html>
